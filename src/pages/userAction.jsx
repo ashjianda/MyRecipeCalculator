@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const UserAction = ({ setAuthorized }) => {
+const UserAction = ({ setAuthorized, authorized }) => {
     const location = useLocation();
     const [option, setOption] = useState("login");
     const [email, setEmail] = useState("");
@@ -20,6 +20,22 @@ const UserAction = ({ setAuthorized }) => {
             return;
         }
         try {
+            const duplicateEmailResponse = await fetch('/api/avoidDuplicateEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const duplicateEmailData = await duplicateEmailResponse.json();
+            console.log(duplicateEmailData.exists);
+
+            if (duplicateEmailData.exists) {
+                alert("Email already exists");
+                return;
+            }
+
             const response = await fetch('/api/addUser', {
                 method: 'POST',
                 headers: {
@@ -32,10 +48,11 @@ const UserAction = ({ setAuthorized }) => {
             if (response.ok) {
                 alert('Signup successful!');
                 setAuthorized(true);
-                window.location.href = '/';
+                setOption("login");
             } else {
                 alert(data.message || 'Signup failed');
             }
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -59,6 +76,7 @@ const UserAction = ({ setAuthorized }) => {
             } else {
                 alert(data.message || 'Login failed');
             }
+            console.log(authorized);
         } catch (error) {
             console.error('Error:', error);
         }

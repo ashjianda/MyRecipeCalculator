@@ -8,7 +8,7 @@ const Searchbar = () => {
 
     return (
         <div className="search-bar-header">
-            <input placeholder='Search for recipes' value={search} onChange={(e) => setSearch(e.target.value)}></input>
+            <input onKeyDown={(e) => e.key === 'Enter' && navigate(`/result?query=${search}`)} placeholder='Search for recipes' value={search} onChange={(e) => setSearch(e.target.value)}></input>
             <FaSearch color="white" size="2em" className="search-icon-header" onClick={() => navigate(`/result?query=${search}`)} />
         </div>
     );

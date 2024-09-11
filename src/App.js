@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import Icon from './components/icon';
@@ -13,8 +13,12 @@ import SearchbarMain from './components/searchbar-main';
 import SearchbarHeader from './components/searchbar-header';
 
 function App() {
-  // const [authorized, setAuthorized] = useState(localStorage.getItem('authorized') === 'true');
-  const [authorized, setAuthorized] = useState(false);
+  const [authorized, setAuthorized] = useState(localStorage.getItem('authorized') === 'true');
+
+  const handleLogout = () => {
+    setAuthorized(false);
+    localStorage.setItem('authorized', 'false');
+  };
 
   return (
     <Router>
@@ -32,7 +36,18 @@ function App() {
             )}
             {authorized && (
               <div className="logged-in">
-                <Link to="/profile">Profile</Link>
+                <div class="profile-dropdown">
+                  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item-profile" href="/cart">Shopping List</a></li>
+                    <li><a class="dropdown-item-profile" href="/pantry">My Pantry</a></li>
+                    <li><a class="dropdown-item-profile" href="/recipes">My Recipes</a></li>
+                    <li><a class="dropdown-item-profile" href="/profile">Settings</a></li>
+                    <li><a class="dropdown-item-profile" href="/" onClick={() => handleLogout()}>Log Out</a></li>
+                  </ul>
+                </div>
               </div>
             )}
           </div>
@@ -62,13 +77,13 @@ function App() {
                 <div id="carouselExampleSlidesOnly" className="carousel slide" data-bs-ride="carousel">
                   <div className="carousel-inner">
                     <div className="carousel-item active">
-                      <img className="d-block w-100" src={`${process.env.PUBLIC_URL}/corn.png`} alt="corn"></img>
+                      <img className="carousel-img" src={`${process.env.PUBLIC_URL}/corn.png`} alt="corn"></img>
                     </div>
                     <div className="carousel-item">
-                      <img className="d-block w-100" src={`${process.env.PUBLIC_URL}/potato.png`} alt="potato"></img>
+                      <img className="carousel-img" src={`${process.env.PUBLIC_URL}/potato.png`} alt="potato"></img>
                     </div>
                     <div className="carousel-item">
-                      <img className="d-block w-100" src={`${process.env.PUBLIC_URL}/chicken.png`} alt="chicken"></img>
+                      <img className="carousel-img" src={`${process.env.PUBLIC_URL}/chicken.png`} alt="chicken"></img>
                     </div>
                   </div>
                 </div>
@@ -123,7 +138,7 @@ function App() {
           <Route path="/pantry" element={<Pantry />} />
           <Route path="/result" element={<Result authorized={authorized} />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/userAction" element={<UserAction setAuthorized={setAuthorized} />} />
+          <Route path="/userAction" element={<UserAction setAuthorized={setAuthorized} authorized={authorized} />} />
         </Routes>
       </div>
     </Router>

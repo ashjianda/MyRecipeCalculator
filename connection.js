@@ -2,6 +2,7 @@ const { CosmosClient } = require('@azure/cosmos');
 
 const endpoint = process.env.DB_ENDPOINT;
 const key = process.env.DB_KEY;
+console.log({ endpoint, key });
 const client = new CosmosClient({ endpoint, key });
 
 const databaseId = process.env.DB_ID;

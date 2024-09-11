@@ -2,7 +2,9 @@ import React from 'react'
 
 function Pantry() {
     return (
-        <div>Pantry</div>
+        <div className="pantry">
+
+        </div>
     );
 };
 
